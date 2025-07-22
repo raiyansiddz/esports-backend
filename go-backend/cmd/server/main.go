@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"esports-fantasy-backend/config"
-	"esports-fantasy-backend/internal/handlers/http"
+	httphandlers "esports-fantasy-backend/internal/handlers/http"
 	"esports-fantasy-backend/internal/handlers/ws"
 	"esports-fantasy-backend/internal/middleware"
 	"esports-fantasy-backend/internal/models"
