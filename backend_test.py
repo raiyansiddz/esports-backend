@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Backend API Testing Script for FastAPI MongoDB Application
+Backend API Testing Script for GoLang eSports Fantasy Backend
 Tests the actual implemented endpoints and functionality
 """
 
@@ -8,27 +8,15 @@ import requests
 import json
 import sys
 import os
+import time
 from datetime import datetime
 
-# Get backend URL from frontend .env file
-def get_backend_url():
-    try:
-        with open('/app/frontend/.env', 'r') as f:
-            for line in f:
-                if line.startswith('REACT_APP_BACKEND_URL='):
-                    return line.split('=', 1)[1].strip()
-    except Exception as e:
-        print(f"Error reading frontend .env: {e}")
-        return None
+# Test the GoLang backend running on localhost:8080
+BACKEND_URL = "http://localhost:8080"
+API_BASE_URL = f"{BACKEND_URL}/api/v1"
 
-BACKEND_URL = get_backend_url()
-if not BACKEND_URL:
-    print("ERROR: Could not get REACT_APP_BACKEND_URL from frontend/.env")
-    sys.exit(1)
-
-API_BASE_URL = f"{BACKEND_URL}/api"
-
-print(f"Testing Backend API at: {API_BASE_URL}")
+print(f"Testing GoLang eSports Fantasy Backend at: {BACKEND_URL}")
+print(f"API Base URL: {API_BASE_URL}")
 print("=" * 60)
 
 def test_root_endpoint():
