@@ -22,9 +22,10 @@ type paymentService struct {
 	config          *config.Config
 }
 
-func NewPaymentService(transactionRepo repository.TransactionRepository, config *config.Config) PaymentService {
+func NewPaymentService(transactionRepo repository.TransactionRepository, userRepo repository.UserRepository, config *config.Config) PaymentService {
 	return &paymentService{
 		transactionRepo: transactionRepo,
+		userRepo:        userRepo,
 		config:          config,
 	}
 }
