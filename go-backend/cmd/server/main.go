@@ -69,7 +69,7 @@ func main() {
 	fantasyTeamService := services.NewFantasyTeamService(fantasyTeamRepo, playerRepo)
 	playerService := services.NewPlayerService(playerRepo)
 	scoringService := services.NewScoringService(db, rdb)
-	paymentService := services.NewPaymentService(transactionRepo, cfg)
+	paymentService := services.NewPaymentService(transactionRepo, userRepo, cfg)
 	leaderboardService := services.NewLeaderboardService(rdb, fantasyTeamRepo)
 
 	// Initialize handlers
