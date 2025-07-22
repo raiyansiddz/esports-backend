@@ -1,12 +1,10 @@
 package services
 
 import (
-	"esports-fantasy-backend/internal/models"
 	"esports-fantasy-backend/internal/repository"
 	"fmt"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type FantasyTeamService interface {
