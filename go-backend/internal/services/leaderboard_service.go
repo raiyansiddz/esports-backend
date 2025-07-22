@@ -2,10 +2,8 @@ package services
 
 import (
 	"context"
-	"esports-fantasy-backend/internal/models"
 	"esports-fantasy-backend/internal/repository"
 	"fmt"
-	"strconv"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
