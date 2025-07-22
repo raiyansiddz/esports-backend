@@ -73,11 +73,11 @@ func main() {
 	leaderboardService := services.NewLeaderboardService(rdb, fantasyTeamRepo)
 
 	// Initialize handlers
-	authHandler := http.NewAuthHandler(authService, userService)
-	userHandler := http.NewUserHandler(userService)
-	adminHandler := http.NewAdminHandler(tournamentService, matchService, contestService, playerService, scoringService)
-	contestHandler := http.NewContestHandler(contestService, fantasyTeamService, leaderboardService)
-	paymentHandler := http.NewPaymentHandler(paymentService)
+	authHandler := httphandlers.NewAuthHandler(authService, userService)
+	userHandler := httphandlers.NewUserHandler(userService)
+	adminHandler := httphandlers.NewAdminHandler(tournamentService, matchService, contestService, playerService, scoringService)
+	contestHandler := httphandlers.NewContestHandler(contestService, fantasyTeamService, leaderboardService)
+	paymentHandler := httphandlers.NewPaymentHandler(paymentService)
 
 	// Initialize WebSocket hub
 	wsHub := ws.NewHub()
