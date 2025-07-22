@@ -1,6 +1,7 @@
 package services
 
 import (
+	"esports-fantasy-backend/internal/models"
 	"esports-fantasy-backend/internal/repository"
 	"fmt"
 
