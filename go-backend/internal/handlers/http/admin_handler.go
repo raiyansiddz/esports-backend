@@ -4,7 +4,6 @@ import (
 	"esports-fantasy-backend/internal/models"
 	"esports-fantasy-backend/internal/services"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
