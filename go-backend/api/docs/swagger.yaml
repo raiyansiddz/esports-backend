@@ -1,0 +1,803 @@
+basePath: /api/v1
+definitions:
+  models.Contest:
+    properties:
+      created_at:
+        type: string
+      current_entries:
+        type: integer
+      entry_fee:
+        type: number
+      id:
+        type: string
+      invite_code:
+        type: string
+      is_private:
+        type: boolean
+      match:
+        $ref: '#/definitions/models.Match'
+      match_id:
+        type: string
+      max_entries:
+        type: integer
+      name:
+        type: string
+      prize_pool:
+        description: JSON structure for prize distribution
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CreatePaymentOrderRequest:
+    properties:
+      amount:
+        type: number
+      contest_id:
+        type: string
+      currency:
+        type: string
+    required:
+    - amount
+    type: object
+  models.CreateTeamRequest:
+    properties:
+      captain_id:
+        type: string
+      contest_id:
+        type: string
+      player_ids:
+        items:
+          type: string
+        type: array
+      team_name:
+        type: string
+      vice_captain_id:
+        type: string
+    required:
+    - captain_id
+    - contest_id
+    - player_ids
+    - team_name
+    - vice_captain_id
+    type: object
+  models.ESportsTeam:
+    properties:
+      id:
+        type: string
+      logo_url:
+        type: string
+      name:
+        type: string
+      players:
+        items:
+          $ref: '#/definitions/models.Player'
+        type: array
+    type: object
+  models.FantasyTeam:
+    properties:
+      contest:
+        $ref: '#/definitions/models.Contest'
+      contest_id:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      players:
+        items:
+          $ref: '#/definitions/models.FantasyTeamPlayer'
+        type: array
+      rank:
+        type: integer
+      team_name:
+        type: string
+      total_points:
+        type: number
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/models.User'
+      user_id:
+        type: string
+    type: object
+  models.FantasyTeamPlayer:
+    properties:
+      fantasy_team:
+        $ref: '#/definitions/models.FantasyTeam'
+      fantasy_team_id:
+        type: string
+      is_captain:
+        type: boolean
+      is_vice_captain:
+        type: boolean
+      player:
+        $ref: '#/definitions/models.Player'
+      player_id:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      phone_number:
+        type: string
+    required:
+    - phone_number
+    type: object
+  models.Match:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      map_name:
+        type: string
+      name:
+        type: string
+      start_time:
+        type: string
+      status:
+        description: upcoming, locked, live, completed, cancelled
+        type: string
+      tournament:
+        $ref: '#/definitions/models.Tournament'
+      tournament_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Player:
+    properties:
+      created_at:
+        type: string
+      credit_value:
+        type: number
+      esports_team:
+        $ref: '#/definitions/models.ESportsTeam'
+      esports_team_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        description: rusher, assaulter, support, sniper
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Tournament:
+    properties:
+      created_at:
+        type: string
+      end_date:
+        type: string
+      game_type:
+        description: BGMI, Valorant, etc.
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+      status:
+        description: upcoming, live, completed
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.UpdateStatsRequest:
+    properties:
+      is_mvp:
+        type: boolean
+      kills:
+        type: integer
+      knockouts:
+        type: integer
+      revives:
+        type: integer
+      survival_time_minutes:
+        type: integer
+      team_kill_penalty:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      is_admin:
+        type: boolean
+      name:
+        type: string
+      phone_number:
+        type: string
+      updated_at:
+        type: string
+      wallet_balance:
+        type: number
+    type: object
+  models.VerifyOTPRequest:
+    properties:
+      otp:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - otp
+    - phone_number
+    type: object
+  services.LeaderboardEntry:
+    properties:
+      points:
+        type: number
+      rank:
+        type: integer
+      team_id:
+        type: string
+      team_name:
+        type: string
+      user_name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: High-performance eSports Fantasy backend with OTP authentication
+  title: eSports Fantasy API
+  version: "1.0"
+paths:
+  /admin/contests:
+    post:
+      consumes:
+      - application/json
+      description: Admin endpoint to create a new contest
+      parameters:
+      - description: Contest data
+        in: body
+        name: contest
+        required: true
+        schema:
+          $ref: '#/definitions/models.Contest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Contest'
+      security:
+      - BearerAuth: []
+      summary: Create a new contest
+      tags:
+      - admin
+  /admin/esports-teams:
+    get:
+      description: Get list of all eSports teams with their players
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ESportsTeam'
+            type: array
+      summary: Get all eSports teams
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Admin endpoint to create a new eSports team
+      parameters:
+      - description: Team data
+        in: body
+        name: team
+        required: true
+        schema:
+          $ref: '#/definitions/models.ESportsTeam'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ESportsTeam'
+      security:
+      - BearerAuth: []
+      summary: Create a new eSports team
+      tags:
+      - admin
+  /admin/matches:
+    get:
+      description: Get list of all matches
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Match'
+            type: array
+      summary: Get all matches
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Admin endpoint to create a new match
+      parameters:
+      - description: Match data
+        in: body
+        name: match
+        required: true
+        schema:
+          $ref: '#/definitions/models.Match'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Match'
+      security:
+      - BearerAuth: []
+      summary: Create a new match
+      tags:
+      - admin
+  /admin/matches/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Admin endpoint to update match status
+      parameters:
+      - description: Match ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New status
+        in: body
+        name: status
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update match status
+      tags:
+      - admin
+  /admin/players:
+    post:
+      consumes:
+      - application/json
+      description: Admin endpoint to create a new player
+      parameters:
+      - description: Player data
+        in: body
+        name: player
+        required: true
+        schema:
+          $ref: '#/definitions/models.Player'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Player'
+      security:
+      - BearerAuth: []
+      summary: Create a new player
+      tags:
+      - admin
+  /admin/stats/match/{matchId}/player/{playerId}:
+    put:
+      consumes:
+      - application/json
+      description: Admin endpoint to update player stats for a match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: string
+      - description: Player ID
+        in: path
+        name: playerId
+        required: true
+        type: string
+      - description: Player statistics
+        in: body
+        name: stats
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateStatsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update player match statistics
+      tags:
+      - admin
+  /admin/tournaments:
+    get:
+      description: Get list of all tournaments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Tournament'
+            type: array
+      summary: Get all tournaments
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Admin endpoint to create a new tournament
+      parameters:
+      - description: Tournament data
+        in: body
+        name: tournament
+        required: true
+        schema:
+          $ref: '#/definitions/models.Tournament'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Tournament'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new tournament
+      tags:
+      - admin
+  /auth/profile:
+    get:
+      description: Get authenticated user's profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - auth
+  /auth/send-otp:
+    post:
+      consumes:
+      - application/json
+      description: Send OTP for authentication (displayed in console for testing)
+      parameters:
+      - description: Phone number
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Send OTP to phone number
+      tags:
+      - auth
+  /auth/verify-otp:
+    post:
+      consumes:
+      - application/json
+      description: Verify OTP and return JWT token
+      parameters:
+      - description: Phone number and OTP
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.VerifyOTPRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verify OTP and authenticate user
+      tags:
+      - auth
+  /contests/{id}:
+    get:
+      description: Get detailed information about a specific contest
+      parameters:
+      - description: Contest ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Contest'
+      summary: Get contest details
+      tags:
+      - contests
+  /contests/{id}/leaderboard:
+    get:
+      description: Get the current leaderboard for a contest
+      parameters:
+      - description: Contest ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Number of entries to return (default: 100)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/services.LeaderboardEntry'
+            type: array
+      summary: Get contest leaderboard
+      tags:
+      - contests
+  /contests/match/{matchId}:
+    get:
+      description: Get all contests available for a specific match
+      parameters:
+      - description: Match ID
+        in: path
+        name: matchId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Contest'
+            type: array
+      summary: Get contests for a match
+      tags:
+      - contests
+  /fantasy/teams:
+    get:
+      description: Get all fantasy teams created by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.FantasyTeam'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get user's fantasy teams
+      tags:
+      - fantasy
+    post:
+      consumes:
+      - application/json
+      description: Create a new fantasy team for a contest
+      parameters:
+      - description: Fantasy team data
+        in: body
+        name: team
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.FantasyTeam'
+      security:
+      - BearerAuth: []
+      summary: Create a fantasy team
+      tags:
+      - fantasy
+  /payment/create-order:
+    post:
+      consumes:
+      - application/json
+      description: Create a Razorpay payment order for wallet top-up
+      parameters:
+      - description: Payment order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreatePaymentOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create payment order
+      tags:
+      - payment
+  /payment/success:
+    post:
+      consumes:
+      - application/json
+      description: Handle successful payment callback
+      parameters:
+      - description: Payment success data
+        in: body
+        name: payment
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Handle payment success
+      tags:
+      - payment
+  /user/profile:
+    put:
+      consumes:
+      - application/json
+      description: Update authenticated user's profile information
+      parameters:
+      - description: Profile data
+        in: body
+        name: profile
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user profile
+      tags:
+      - user
+  /user/wallet:
+    get:
+      description: Get the current wallet balance for authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: float64
+              type: number
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user wallet balance
+      tags:
+      - user
+  /ws:
+    get:
+      description: WebSocket connection for real-time updates
+      responses:
+        "101":
+          description: Switching Protocols
+      summary: WebSocket endpoint
+      tags:
+      - websocket
+swagger: "2.0"
