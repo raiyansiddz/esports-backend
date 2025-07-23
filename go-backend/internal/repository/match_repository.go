@@ -17,6 +17,10 @@ type MatchRepository interface {
 	UpdateMatchStatus(id uuid.UUID, status string) error
 	GetUpcomingMatches() ([]models.Match, error)
 	GetMatchesNeedingLock() ([]models.Match, error)
+	
+	// New methods for enhanced features
+	GetByID(id string) (*models.Match, error)
+	Update(match *models.Match) error
 }
 
 type matchRepository struct {
