@@ -83,31 +83,34 @@ def authenticate_user(phone_number, is_admin=False):
             print(f"❌ Failed to send OTP: {otp_response.text}")
             return None
         
-        # For testing, we'll use a default OTP (this should be configured in backend for testing)
-        test_otp = "123456"  # Default test OTP
+        print("Note: Check backend logs for actual OTP in development mode")
         
-        # Verify OTP
-        verify_data = {"phone_number": phone_number, "otp": test_otp}
-        verify_response = requests.post(
-            f"{API_BASE_URL}/auth/verify-otp",
-            json=verify_data,
-            headers={"Content-Type": "application/json"},
-            timeout=10
-        )
+        # Try common test OTPs that might be configured
+        test_otps = ["123456", "000000", "111111", "999999"]
         
-        print(f"Verify OTP Status: {verify_response.status_code}")
-        if verify_response.status_code == 200:
-            data = verify_response.json()
-            token = data.get("token")
-            if token:
-                print(f"✅ Authentication successful for {'Admin' if is_admin else 'User'}")
-                return token
-            else:
-                print("❌ No token received in response")
-                return None
-        else:
-            print(f"❌ OTP verification failed: {verify_response.text}")
-            return None
+        for test_otp in test_otps:
+            # Verify OTP
+            verify_data = {"phone_number": phone_number, "otp": test_otp}
+            verify_response = requests.post(
+                f"{API_BASE_URL}/auth/verify-otp",
+                json=verify_data,
+                headers={"Content-Type": "application/json"},
+                timeout=10
+            )
+            
+            print(f"Trying OTP {test_otp}: Status {verify_response.status_code}")
+            if verify_response.status_code == 200:
+                data = verify_response.json()
+                token = data.get("token")
+                if token:
+                    print(f"✅ Authentication successful for {'Admin' if is_admin else 'User'} with OTP {test_otp}")
+                    return token
+                else:
+                    print("❌ No token received in response")
+                    return None
+        
+        print(f"❌ All test OTPs failed. Need to check backend logs for actual OTP")
+        return None
             
     except requests.exceptions.RequestException as e:
         print(f"❌ Authentication request failed: {e}")
