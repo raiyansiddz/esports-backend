@@ -9,6 +9,7 @@ import (
         "esports-fantasy-backend/internal/models"
         "esports-fantasy-backend/internal/repository"
 
+        "github.com/google/uuid"
         "github.com/robfig/cron/v3"
 )
 
