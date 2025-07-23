@@ -24,6 +24,11 @@ type UserRepository interface {
 	GetByID(id string) (*models.User, error)
 	GetByPhoneNumber(phoneNumber string) (*models.User, error)
 	Update(user *models.User) error
+	
+	// Referral system methods
+	GetByReferralCode(referralCode string) (*models.User, error)
+	GetReferredUsers(referrerID uuid.UUID) ([]models.User, error)
+	GetTopReferrers(limit int) ([]models.User, error)
 }
 
 type userRepository struct {
