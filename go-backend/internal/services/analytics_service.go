@@ -1,6 +1,8 @@
 package services
 
 import (
+        "context"
+        "database/sql"
         "fmt"
         "log"
         "time"
@@ -12,6 +14,8 @@ import (
         "github.com/go-redis/redis/v8"
         "gorm.io/gorm"
 )
+
+var ctx = context.Background()
 
 type AnalyticsService struct {
         cfg             *config.Config
