@@ -69,18 +69,21 @@ type Match struct {
 }
 
 type Contest struct {
-	ID             uuid.UUID `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
-	MatchID        uuid.UUID `json:"match_id"`
-	Match          Match     `json:"match" gorm:"foreignKey:MatchID"`
-	Name           string    `json:"name" gorm:"not null"`
-	EntryFee       float64   `json:"entry_fee" gorm:"not null"`
-	PrizePool      string    `json:"prize_pool" gorm:"type:jsonb"` // JSON structure for prize distribution
-	MaxEntries     int       `json:"max_entries" gorm:"not null"`
-	CurrentEntries int       `json:"current_entries" gorm:"default:0"`
-	IsPrivate      bool      `json:"is_private" gorm:"default:false"`
-	InviteCode     string    `json:"invite_code" gorm:"unique"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+	ID                uuid.UUID `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	MatchID           uuid.UUID `json:"match_id"`
+	Match             Match     `json:"match" gorm:"foreignKey:MatchID"`
+	Name              string    `json:"name" gorm:"not null"`
+	EntryFee          float64   `json:"entry_fee" gorm:"not null"`
+	PrizePool         string    `json:"prize_pool" gorm:"type:jsonb"` // JSON structure for prize distribution
+	MaxEntries        int       `json:"max_entries" gorm:"not null"`
+	CurrentEntries    int       `json:"current_entries" gorm:"default:0"`
+	IsPrivate         bool      `json:"is_private" gorm:"default:false"`
+	InviteCode        string    `json:"invite_code" gorm:"unique"`
+	Status            string    `json:"status" gorm:"default:open"` // open, locked, completed, cancelled
+	LockedAt          *time.Time `json:"locked_at"`
+	PrizesDistributed bool      `json:"prizes_distributed" gorm:"default:false"`
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
 }
 
 type FantasyTeam struct {
