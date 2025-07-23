@@ -64,3 +64,11 @@ func (r *playerRepository) GetPlayersByIDs(ids []uuid.UUID) ([]models.Player, er
 	err := r.db.Where("id IN ?", ids).Preload("ESportsTeam").Find(&players).Error
 	return players, err
 }
+
+func (r *playerRepository) GetPlayersByMatchID(matchID string) ([]*models.Player, error) {
+	var players []*models.Player
+	// This query would typically involve joining through matches -> teams -> players
+	// For now, return all players as it's a simulation service
+	err := r.db.Preload("ESportsTeam").Find(&players).Error
+	return players, err
+}
