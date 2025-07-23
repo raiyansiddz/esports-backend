@@ -8,14 +8,23 @@ import (
 )
 
 type User struct {
-	ID            uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
-	PhoneNumber   string         `json:"phone_number" gorm:"unique;not null"`
-	Name          string         `json:"name"`
-	WalletBalance float64        `json:"wallet_balance" gorm:"default:0.00"`
-	IsAdmin       bool           `json:"is_admin" gorm:"default:false"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	DeletedAt     gorm.DeletedAt `json:"-" gorm:"index"`
+	ID              uuid.UUID      `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
+	PhoneNumber     string         `json:"phone_number" gorm:"unique;not null"`
+	Name            string         `json:"name"`
+	Username        string         `json:"username" gorm:"unique;not null"`
+	ProfileImage    string         `json:"profile_image" gorm:"type:text"` // Base64 encoded image
+	WalletBalance   float64        `json:"wallet_balance" gorm:"default:0.00"`
+	IsAdmin         bool           `json:"is_admin" gorm:"default:false"`
+	IsVerified      bool           `json:"is_verified" gorm:"default:false"`
+	ReferralCode    string         `json:"referral_code" gorm:"unique"`
+	ReferredBy      *uuid.UUID     `json:"referred_by"`
+	ReferralBonus   float64        `json:"referral_bonus" gorm:"default:0.00"`
+	TierLevel       string         `json:"tier_level" gorm:"default:bronze"` // bronze, silver, gold, diamond, vip
+	TotalPoints     int64          `json:"total_points" gorm:"default:0"`
+	ConsecutiveWins int            `json:"consecutive_wins" gorm:"default:0"`
+	CreatedAt       time.Time      `json:"created_at"`
+	UpdatedAt       time.Time      `json:"updated_at"`
+	DeletedAt       gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
 type OTP struct {
