@@ -235,5 +235,33 @@ func SetupRoutes(
 			scoringRules.PUT("/:id", adminEnhancedHandler.UpdateScoringRule)
 			scoringRules.DELETE("/:id", adminEnhancedHandler.DeleteScoringRule)
 		}
+
+		// Advanced admin features
+		// Achievement management
+		achievements := admin.Group("/achievements")
+		{
+			achievements.POST("", adminAdvancedHandler.CreateAchievement)
+			achievements.GET("", adminAdvancedHandler.GetAchievements)
+			achievements.PUT("/:id", adminAdvancedHandler.UpdateAchievement)
+			achievements.PATCH("/:id/toggle", adminAdvancedHandler.ToggleAchievementStatus)
+		}
+
+		// Contest template management
+		contestTemplates := admin.Group("/contest-templates")
+		{
+			contestTemplates.POST("", adminAdvancedHandler.CreateContestTemplate)
+			contestTemplates.GET("", adminAdvancedHandler.GetContestTemplates)
+		}
+
+		// Season league management
+		seasonLeagues := admin.Group("/season-leagues")
+		{
+			seasonLeagues.POST("", adminAdvancedHandler.CreateSeasonLeague)
+			seasonLeagues.GET("", adminAdvancedHandler.GetSeasonLeagues)
+		}
+
+		// Player analytics management
+		admin.PUT("/player-analytics", adminAdvancedHandler.UpdatePlayerAnalytics)
+		admin.GET("/top-performers", adminAdvancedHandler.GetTopPerformers)
 	}
 }
