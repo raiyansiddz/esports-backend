@@ -26,9 +26,9 @@ import (
 )
 
 // @title eSports Fantasy API
-// @version 1.0
-// @description High-performance eSports Fantasy backend with OTP authentication
-// @host localhost:8080
+// @version 2.0
+// @description Advanced eSports Fantasy backend with PhonePe payments, Firebase auth, auto-management, analytics and real-time features
+// @host localhost:8001
 // @BasePath /api/v1
 func main() {
 	// Load configuration
@@ -53,6 +53,7 @@ func main() {
 
 	// Initialize repositories
 	userRepo := repository.NewUserRepository(db)
+	otpRepo := repository.NewOTPRepository(db)
 	tournamentRepo := repository.NewTournamentRepository(db)
 	matchRepo := repository.NewMatchRepository(db)
 	contestRepo := repository.NewContestRepository(db)
@@ -60,8 +61,9 @@ func main() {
 	playerRepo := repository.NewPlayerRepository(db)
 	transactionRepo := repository.NewTransactionRepository(db)
 
-	// Initialize services
+	// Initialize core services
 	authService := services.NewAuthService(userRepo, cfg)
+	firebaseAuthService := services.NewFirebaseAuthService(cfg, userRepo, otpRepo)
 	userService := services.NewUserService(userRepo, cfg)
 	tournamentService := services.NewTournamentService(tournamentRepo)
 	matchService := services.NewMatchService(matchRepo)
@@ -69,22 +71,41 @@ func main() {
 	fantasyTeamService := services.NewFantasyTeamService(fantasyTeamRepo, playerRepo)
 	playerService := services.NewPlayerService(playerRepo)
 	scoringService := services.NewScoringService(db, rdb)
-	paymentService := services.NewPaymentService(transactionRepo, userRepo, cfg)
 	leaderboardService := services.NewLeaderboardService(rdb, fantasyTeamRepo)
+
+	// Initialize advanced services
+	phonePeService := services.NewPhonePeService(cfg, userRepo, transactionRepo, contestRepo)
+	paymentService := services.NewPaymentService(transactionRepo, userRepo, cfg)
+	analyticsService := services.NewAnalyticsService(cfg, db, rdb, userRepo, contestRepo, transactionRepo, matchRepo)
+	matchSimulationService := services.NewMatchSimulationService(cfg, matchRepo, playerRepo, scoringService, leaderboardService, rdb)
+	autoContestService := services.NewAutoContestService(cfg, contestRepo, matchRepo, fantasyTeamRepo, transactionRepo, userRepo, leaderboardService)
 
 	// Initialize handlers
 	authHandler := httphandlers.NewAuthHandler(authService, userService)
+	firebaseAuthHandler := httphandlers.NewFirebaseAuthHandler(firebaseAuthService)
 	userHandler := httphandlers.NewUserHandler(userService)
 	adminHandler := httphandlers.NewAdminHandler(tournamentService, matchService, contestService, playerService, scoringService)
 	contestHandler := httphandlers.NewContestHandler(contestService, fantasyTeamService, leaderboardService)
 	paymentHandler := httphandlers.NewPaymentHandler(paymentService)
+	phonePeHandler := httphandlers.NewPhonePeHandler(phonePeService)
+	analyticsHandler := httphandlers.NewAnalyticsHandler(analyticsService)
+	matchSimulationHandler := httphandlers.NewMatchSimulationHandler(matchSimulationService)
+	autoContestHandler := httphandlers.NewAutoContestHandler(autoContestService)
 
 	// Initialize WebSocket hub
 	wsHub := ws.NewHub()
 	wsHandler := ws.NewWebSocketHandler(wsHub, leaderboardService)
 
-	// Start WebSocket hub
+	// Start services
 	go wsHub.Run()
+	
+	// Start auto contest management
+	if err := autoContestService.StartScheduler(); err != nil {
+		log.Printf("❌ Failed to start auto contest service: %v", err)
+	}
+	
+	// Start analytics caching
+	analyticsService.StartAnalyticsCaching()
 
 	// Initialize router
 	router := gin.New()
@@ -96,12 +117,12 @@ func main() {
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/redoc", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "redoc.html", gin.H{
-			"title": "eSports Fantasy API",
+			"title": "eSports Fantasy API v2.0",
 		})
 	})
 
 	// Setup routes
-	routes.SetupRoutes(router, authHandler, userHandler, adminHandler, contestHandler, paymentHandler, wsHandler, cfg)
+	routes.SetupRoutes(router, authHandler, firebaseAuthHandler, userHandler, adminHandler, contestHandler, paymentHandler, phonePeHandler, analyticsHandler, matchSimulationHandler, autoContestHandler, wsHandler, cfg)
 
 	// Server configuration
 	srv := &http.Server{
@@ -111,9 +132,12 @@ func main() {
 
 	// Start server in goroutine
 	go func() {
-		log.Printf("🚀 Server starting on port %s", cfg.Port)
-		log.Printf("📚 API Documentation available at http://localhost:%s/docs", cfg.Port)
-		log.Printf("📖 ReDoc available at http://localhost:%s/redoc", cfg.Port)
+		log.Printf("🚀 Enhanced eSports Fantasy Backend v2.0 starting on port %s", cfg.Port)
+		log.Printf("📚 API Documentation: http://localhost:%s/docs", cfg.Port)
+		log.Printf("📖 ReDoc: http://localhost:%s/redoc", cfg.Port)
+		log.Printf("🔥 Features: PhonePe Payments, Firebase Auth, Auto-Management, Analytics, Real-time Simulation")
+		log.Printf("💳 Payment Gateway: PhonePe (Dummy Mode: %t)", cfg.Dummy)
+		log.Printf("🔐 Authentication: Firebase + JWT (Console OTP: %t)", cfg.OTPConsole)
 		
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
@@ -127,6 +151,9 @@ func main() {
 
 	log.Println("🛑 Shutting down server...")
 
+	// Stop auto contest service
+	autoContestService.StopScheduler()
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -134,7 +161,7 @@ func main() {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 
-	log.Println("✅ Server exited")
+	log.Println("✅ Server exited gracefully")
 }
 
 func initDatabase(databaseURL string) (*gorm.DB, error) {
