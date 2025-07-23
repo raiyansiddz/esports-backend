@@ -12,6 +12,7 @@ import (
         "esports-fantasy-backend/internal/repository"
 
         "github.com/go-redis/redis/v8"
+        "github.com/google/uuid"
         "gorm.io/gorm"
 )
 
