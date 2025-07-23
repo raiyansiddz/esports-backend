@@ -147,3 +147,28 @@ func (s *leaderboardService) GetContestLeaderboard(contestID uuid.UUID, limit in
 	// This is the same as GetLeaderboard method
 	return s.GetLeaderboard(contestID, limit)
 }
+
+func (s *leaderboardService) RefreshContestLeaderboard(contestID uuid.UUID) error {
+	// Refresh leaderboard by calculating scores from database
+	entries, err := s.getLeaderboardFromDB(contestID, 100)
+	if err != nil {
+		return err
+	}
+	
+	// Update Redis with fresh data
+	ctx := context.Background()
+	leaderboardKey := fmt.Sprintf("leaderboard:%s", contestID)
+	
+	// Clear existing data
+	s.rdb.Del(ctx, leaderboardKey)
+	
+	// Add updated scores
+	for _, entry := range entries {
+		s.rdb.ZAdd(ctx, leaderboardKey, &redis.Z{
+			Score:  entry.Points,
+			Member: entry.TeamID.String(),
+		})
+	}
+	
+	return nil
+}
