@@ -214,14 +214,11 @@ func (s *AutoContestService) distributePrizes(contest *models.Contest) error {
                         
                         // Create prize transaction
                         transaction := &models.Transaction{
-                                ID:             fmt.Sprintf("prize_%s_%d", contest.ID, rank),
                                 UserID:         entry.UserID,
                                 Amount:         amount,
-                                Type:           "PRIZE",
-                                Status:         "SUCCESS",
-                                PaymentGateway: "INTERNAL",
-                                Description:    fmt.Sprintf("Prize for rank %d in contest %s", rank, contest.Name),
-                                ContestID:      contest.ID,
+                                Type:           "winnings",
+                                Status:         "completed",
+                                RelatedEntityID: &contest.ID,
                                 CreatedAt:      time.Now(),
                                 UpdatedAt:      time.Now(),
                         }
