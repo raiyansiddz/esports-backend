@@ -108,7 +108,8 @@ func (s *AutoContestService) autoLockContests() {
                 if timeUntilMatch <= lockTime {
                         // Lock the contest
                         contest.Status = "LOCKED"
-                        contest.LockedAt = time.Now()
+                        now := time.Now()
+                        contest.LockedAt = &now
                         contest.UpdatedAt = time.Now()
 
                         if err := s.contestRepo.Update(contest); err != nil {
