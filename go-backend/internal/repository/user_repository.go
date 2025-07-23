@@ -123,3 +123,28 @@ func (r *userRepository) GetByPhoneNumber(phoneNumber string) (*models.User, err
 func (r *userRepository) Update(user *models.User) error {
 	return r.db.Save(user).Error
 }
+
+// Referral system implementations
+func (r *userRepository) GetByReferralCode(referralCode string) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("referral_code = ?", referralCode).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepository) GetReferredUsers(referrerID uuid.UUID) ([]models.User, error) {
+	var users []models.User
+	err := r.db.Where("referred_by = ?", referrerID).Find(&users).Error
+	return users, err
+}
+
+func (r *userRepository) GetTopReferrers(limit int) ([]models.User, error) {
+	var users []models.User
+	err := r.db.Where("referral_bonus > 0").
+		Order("referral_bonus DESC").
+		Limit(limit).
+		Find(&users).Error
+	return users, err
+}
