@@ -167,7 +167,7 @@ func (s *FirebaseAuthService) VerifyOTP(phoneNumber, otp string) (*AuthResponse,
         }
 
         // Delete used OTP
-        s.otpRepo.Delete(otpRecord.ID)
+        s.otpRepo.Delete(otpRecord.ID.String())
 
         // Get or create user
         user, err := s.userRepo.GetByPhoneNumber(phoneNumber)
