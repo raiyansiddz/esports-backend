@@ -384,9 +384,29 @@ def test_admin_scoring_rules():
     try:
         headers = {"Authorization": f"Bearer {admin_token}"}
         
-        # Test get scoring rules
+        # First get games to use for scoring rules
+        games_response = requests.get(
+            f"{API_BASE_URL}/admin/games",
+            headers=headers,
+            timeout=10
+        )
+        
+        if games_response.status_code != 200:
+            print(f"❌ Failed to get games for scoring rules test: {games_response.text}")
+            return False
+        
+        games_data = games_response.json()
+        if "games" not in games_data or len(games_data["games"]) == 0:
+            print("❌ No games available for scoring rules test")
+            return False
+        
+        # Use the first game
+        first_game = games_data["games"][0]
+        game_id = first_game["id"]
+        
+        # Test get scoring rules for this game
         response = requests.get(
-            f"{API_BASE_URL}/admin/scoring-rules",
+            f"{API_BASE_URL}/admin/scoring-rules?game_id={game_id}",
             headers=headers,
             timeout=10
         )
