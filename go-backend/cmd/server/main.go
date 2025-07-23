@@ -100,6 +100,10 @@ func main() {
 	analyticsHandler := httphandlers.NewAnalyticsHandler(analyticsService)
 	matchSimulationHandler := httphandlers.NewMatchSimulationHandler(matchSimulationService)
 	autoContestHandler := httphandlers.NewAutoContestHandler(autoContestService)
+	
+	// Initialize enhanced handlers
+	adminEnhancedHandler := httphandlers.NewAdminEnhancedHandler(usernameService, gameService)
+	userEnhancedHandler := httphandlers.NewUserEnhancedHandler(userService, usernameService)
 
 	// Initialize WebSocket hub
 	wsHub := ws.NewHub()
