@@ -110,6 +110,18 @@ func SetupRoutes(
 			user.GET("/check-username", userEnhancedHandler.CheckUsernameAvailability)
 			user.GET("/username-prefixes", userEnhancedHandler.GetUsernamePrefixes)
 			user.POST("/upload-image", userEnhancedHandler.UploadProfileImage)
+			
+			// Advanced user features
+			user.GET("/achievements", userAdvancedHandler.GetMyAchievements)
+			user.GET("/achievements/available", userAdvancedHandler.GetAvailableAchievements)
+			user.POST("/referral/generate", userAdvancedHandler.GenerateReferralCode)
+			user.POST("/referral/apply", userAdvancedHandler.ApplyReferralCode)
+			user.GET("/referral/stats", userAdvancedHandler.GetReferralStats)
+			user.GET("/referral/leaderboard", userAdvancedHandler.GetReferralLeaderboard)
+			user.GET("/season-leagues", userAdvancedHandler.GetActiveSeasonLeagues)
+			user.POST("/season-leagues/:id/join", userAdvancedHandler.JoinSeasonLeague)
+			user.GET("/season-leagues/:id/leaderboard", userAdvancedHandler.GetSeasonLeagueLeaderboard)
+			user.GET("/player-heatmap", userAdvancedHandler.GetPlayerHeatmap)
 		}
 
 		// Fantasy team routes
