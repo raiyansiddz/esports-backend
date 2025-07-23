@@ -60,6 +60,11 @@ func main() {
 	fantasyTeamRepo := repository.NewFantasyTeamRepository(db)
 	playerRepo := repository.NewPlayerRepository(db)
 	transactionRepo := repository.NewTransactionRepository(db)
+	
+	// Initialize enhanced repositories
+	usernamePrefixRepo := repository.NewUsernamePrefixRepository(db)
+	gameRepo := repository.NewGameRepository(db)
+	gameScoringRuleRepo := repository.NewGameScoringRuleRepository(db)
 
 	// Initialize core services
 	authService := services.NewAuthService(userRepo, cfg)
@@ -72,6 +77,10 @@ func main() {
 	playerService := services.NewPlayerService(playerRepo)
 	scoringService := services.NewScoringService(db, rdb)
 	leaderboardService := services.NewLeaderboardService(rdb, fantasyTeamRepo)
+	
+	// Initialize enhanced services
+	usernameService := services.NewUsernameService(userRepo, usernamePrefixRepo, cfg)
+	gameService := services.NewGameService(gameRepo, gameScoringRuleRepo, cfg)
 
 	// Initialize advanced services
 	phonePeService := services.NewPhonePeService(cfg, userRepo, transactionRepo, contestRepo)
