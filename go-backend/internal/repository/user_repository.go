@@ -17,6 +17,12 @@ type UserRepository interface {
 	GetValidOTP(phoneNumber, code string) (*models.OTP, error)
 	MarkOTPAsUsed(otpID uuid.UUID) error
 	UpdateWalletBalance(userID uuid.UUID, amount float64) error
+	
+	// New methods for enhanced features
+	Create(user *models.User) error
+	GetByID(id string) (*models.User, error)
+	GetByPhoneNumber(phoneNumber string) (*models.User, error)
+	Update(user *models.User) error
 }
 
 type userRepository struct {
