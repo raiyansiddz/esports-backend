@@ -159,7 +159,7 @@ func (s *FirebaseAuthService) VerifyOTP(phoneNumber, otp string) (*AuthResponse,
         }
 
         // Verify OTP
-        if otpRecord.OTP != otp {
+        if otpRecord.Code != otp {
                 return &AuthResponse{
                         Success: false,
                         Message: "Invalid OTP",
