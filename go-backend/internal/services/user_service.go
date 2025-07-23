@@ -12,6 +12,8 @@ import (
 type UserService interface {
 	GetProfile(userID uuid.UUID) (*models.User, error)
 	UpdateProfile(userID uuid.UUID, name string) error
+	UpdateUserProfile(userID uuid.UUID, name, username, profileImage string) error
+	UpdateProfileImage(userID uuid.UUID, profileImage string) error
 	GetWalletBalance(userID uuid.UUID) (float64, error)
 }
 
