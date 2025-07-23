@@ -151,7 +151,7 @@ func (s *AutoContestService) autoPrizeDistribution() {
                 }
 
                 // Get match to ensure it's really completed
-                match, err := s.matchRepo.GetByID(contest.MatchID)
+                match, err := s.matchRepo.GetByID(contest.MatchID.String())
                 if err != nil {
                         log.Printf("❌ Error fetching match %s: %v", contest.MatchID, err)
                         continue
