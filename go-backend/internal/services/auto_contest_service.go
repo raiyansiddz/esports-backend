@@ -350,7 +350,8 @@ func (s *AutoContestService) ForceLockContest(contestID string) error {
         }
 
         contest.Status = "LOCKED"
-        contest.LockedAt = time.Now()
+        now := time.Now()
+        contest.LockedAt = &now
         contest.UpdatedAt = time.Now()
 
         return s.contestRepo.Update(contest)
