@@ -30,7 +30,7 @@ func NewAutoContestService(
         fantasyTeamRepo repository.FantasyTeamRepository,
         transactionRepo repository.TransactionRepository,
         userRepo repository.UserRepository,
-        leaderboardService *LeaderboardService,
+        leaderboardService LeaderboardService,
 ) *AutoContestService {
         return &AutoContestService{
                 cfg:                cfg,
