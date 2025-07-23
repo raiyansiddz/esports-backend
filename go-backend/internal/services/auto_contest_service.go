@@ -97,7 +97,7 @@ func (s *AutoContestService) autoLockContests() {
 
         for _, contest := range contests {
                 // Get match details
-                match, err := s.matchRepo.GetByID(contest.MatchID)
+                match, err := s.matchRepo.GetByID(contest.MatchID.String())
                 if err != nil {
                         log.Printf("❌ Error fetching match %s: %v", contest.MatchID, err)
                         continue
