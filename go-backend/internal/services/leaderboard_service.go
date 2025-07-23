@@ -13,6 +13,8 @@ type LeaderboardService interface {
 	GetLeaderboard(contestID uuid.UUID, limit int) ([]LeaderboardEntry, error)
 	UpdateTeamScore(contestID, teamID uuid.UUID, points float64) error
 	GetTeamRank(contestID, teamID uuid.UUID) (int, error)
+	InitializeContestLeaderboard(contestID uuid.UUID) error
+	GetContestLeaderboard(contestID uuid.UUID, limit int) ([]LeaderboardEntry, error)
 }
 
 type LeaderboardEntry struct {
