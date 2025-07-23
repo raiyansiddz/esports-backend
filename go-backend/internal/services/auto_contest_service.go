@@ -223,7 +223,7 @@ func (s *AutoContestService) distributePrizes(contest *models.Contest) error {
                                 UpdatedAt:      time.Now(),
                         }
 
-                        if err := s.transactionRepo.Create(transaction); err != nil {
+                        if err := s.transactionRepo.CreateTransaction(transaction); err != nil {
                                 log.Printf("❌ Error creating prize transaction: %v", err)
                                 continue
                         }
