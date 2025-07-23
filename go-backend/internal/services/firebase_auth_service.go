@@ -203,7 +203,7 @@ func (s *FirebaseAuthService) VerifyOTP(phoneNumber, otp string) (*AuthResponse,
 
         // Create user profile response
         userProfile := &UserProfile{
-                ID:            user.ID,
+                ID:            user.ID.String(),
                 PhoneNumber:   user.PhoneNumber,
                 WalletBalance: user.WalletBalance,
                 IsAdmin:       user.IsAdmin,
