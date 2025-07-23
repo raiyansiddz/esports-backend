@@ -72,7 +72,7 @@ type ContestParticipation struct {
 }
 
 type UserAnalytics struct {
-        UserID              string                `json:"user_id"`
+        UserID              uuid.UUID             `json:"user_id"`
         PhoneNumber         string                `json:"phone_number"`
         TotalContests       int64                 `json:"total_contests"`
         WonContests         int64                 `json:"won_contests"`
