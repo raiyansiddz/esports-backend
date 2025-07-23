@@ -299,7 +299,7 @@ func (s *AutoContestService) autoUpdateMatchStatus() {
         }
 }
 
-func (s *AutoContestService) updateContestsForCompletedMatch(matchID string) {
+func (s *AutoContestService) updateContestsForCompletedMatch(matchID uuid.UUID) {
         contests, err := s.contestRepo.GetContestsByMatchID(matchID)
         if err != nil {
                 log.Printf("❌ Error fetching contests for match %s: %v", matchID, err)
