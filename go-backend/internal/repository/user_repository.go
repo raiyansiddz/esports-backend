@@ -81,3 +81,30 @@ func (r *userRepository) UpdateWalletBalance(userID uuid.UUID, amount float64) e
 	return r.db.Model(&models.User{}).Where("id = ?", userID).
 		Update("wallet_balance", gorm.Expr("wallet_balance + ?", amount)).Error
 }
+
+// New methods for enhanced features
+func (r *userRepository) Create(user *models.User) error {
+	return r.db.Create(user).Error
+}
+
+func (r *userRepository) GetByID(id string) (*models.User, error) {
+	var user models.User
+	err := r.db.First(&user, "id = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepository) GetByPhoneNumber(phoneNumber string) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("phone_number = ?", phoneNumber).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepository) Update(user *models.User) error {
+	return r.db.Save(user).Error
+}
