@@ -286,7 +286,7 @@ func (s *AutoContestService) autoUpdateMatchStatus() {
 
                 if updated {
                         match.UpdatedAt = time.Now()
-                        if err := s.matchRepo.Update(match); err != nil {
+                        if err := s.matchRepo.Update(&match); err != nil {
                                 log.Printf("❌ Error updating match status: %v", err)
                         } else {
                                 updatedCount++
