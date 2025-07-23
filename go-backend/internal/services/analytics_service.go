@@ -104,7 +104,7 @@ type TransactionSummary struct {
 }
 
 type MatchAnalytics struct {
-        MatchID           string                 `json:"match_id"`
+        MatchID           uuid.UUID              `json:"match_id"`
         MatchName         string                 `json:"match_name"`
         TotalContests     int64                  `json:"total_contests"`
         TotalParticipants int64                  `json:"total_participants"`
