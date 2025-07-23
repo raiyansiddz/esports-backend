@@ -147,7 +147,7 @@ func main() {
 	})
 
 	// Setup routes
-	routes.SetupRoutes(router, authHandler, firebaseAuthHandler, userHandler, adminHandler, contestHandler, paymentHandler, phonePeHandler, analyticsHandler, matchSimulationHandler, autoContestHandler, wsHandler, adminEnhancedHandler, userEnhancedHandler, cfg)
+	routes.SetupRoutes(router, authHandler, firebaseAuthHandler, userHandler, adminHandler, contestHandler, paymentHandler, phonePeHandler, analyticsHandler, matchSimulationHandler, autoContestHandler, wsHandler, adminEnhancedHandler, userEnhancedHandler, adminAdvancedHandler, userAdvancedHandler, cfg)
 
 	// Server configuration
 	srv := &http.Server{
