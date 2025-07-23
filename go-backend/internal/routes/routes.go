@@ -100,6 +100,14 @@ func SetupRoutes(
 			user.PUT("/profile", userHandler.UpdateProfile)
 			user.GET("/wallet", userHandler.GetWalletBalance)
 			user.GET("/analytics", analyticsHandler.GetUserAnalytics) // Own analytics
+			
+			// Enhanced user features
+			user.POST("/generate-username", userEnhancedHandler.GenerateUsername)
+			user.PUT("/profile-enhanced", userEnhancedHandler.UpdateProfile)
+			user.GET("/profile-enhanced", userEnhancedHandler.GetProfile)
+			user.GET("/check-username", userEnhancedHandler.CheckUsernameAvailability)
+			user.GET("/username-prefixes", userEnhancedHandler.GetUsernamePrefixes)
+			user.POST("/upload-image", userEnhancedHandler.UploadProfileImage)
 		}
 
 		// Fantasy team routes
