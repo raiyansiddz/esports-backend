@@ -12,6 +12,7 @@ type UserRepository interface {
 	CreateUser(user *models.User) error
 	GetUserByPhone(phoneNumber string) (*models.User, error)
 	GetUserByID(id uuid.UUID) (*models.User, error)
+	GetByUsername(username string) (*models.User, error)
 	UpdateUser(user *models.User) error
 	CreateOTP(otp *models.OTP) error
 	GetValidOTP(phoneNumber, code string) (*models.OTP, error)
