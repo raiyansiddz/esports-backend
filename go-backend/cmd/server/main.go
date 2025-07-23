@@ -209,5 +209,14 @@ func autoMigrate(db *gorm.DB) error {
 		&models.FantasyTeamPlayer{},
 		&models.PlayerMatchStats{},
 		&models.Transaction{},
+		// New enhanced models
+		&models.UsernamePrefix{},
+		&models.Game{},
+		&models.GameScoringRule{},
+		&models.Achievement{},
+		&models.UserAchievement{},
+		&models.ContestTemplate{},
+		&models.PlayerAnalytics{},
+		&models.SeasonLeague{},
 	)
 }
