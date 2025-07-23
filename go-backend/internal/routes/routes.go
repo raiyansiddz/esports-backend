@@ -191,5 +191,35 @@ func SetupRoutes(
 			autoContest.POST("/contests/:contestId/distribute-prizes", autoContestHandler.ForceDistributePrizes)
 			autoContest.POST("/contests/:contestId/lock", autoContestHandler.ForceLockContest)
 		}
+
+		// Enhanced admin features
+		// Username prefix management
+		usernamePrefixes := admin.Group("/username-prefixes")
+		{
+			usernamePrefixes.POST("", adminEnhancedHandler.CreateUsernamePrefix)
+			usernamePrefixes.GET("", adminEnhancedHandler.GetUsernamePrefixes)
+			usernamePrefixes.PUT("/:id", adminEnhancedHandler.UpdateUsernamePrefix)
+			usernamePrefixes.DELETE("/:id", adminEnhancedHandler.DeleteUsernamePrefix)
+		}
+
+		// Game management
+		games := admin.Group("/games")
+		{
+			games.POST("", adminEnhancedHandler.CreateGame)
+			games.GET("", adminEnhancedHandler.GetGames)
+			games.GET("/:id", adminEnhancedHandler.GetGame)
+			games.PUT("/:id", adminEnhancedHandler.UpdateGame)
+			games.PATCH("/:id/toggle", adminEnhancedHandler.ToggleGameStatus)
+			games.DELETE("/:id", adminEnhancedHandler.DeleteGame)
+		}
+
+		// Scoring rules management
+		scoringRules := admin.Group("/scoring-rules")
+		{
+			scoringRules.POST("", adminEnhancedHandler.CreateScoringRule)
+			scoringRules.GET("", adminEnhancedHandler.GetScoringRules)
+			scoringRules.PUT("/:id", adminEnhancedHandler.UpdateScoringRule)
+			scoringRules.DELETE("/:id", adminEnhancedHandler.DeleteScoringRule)
+		}
 	}
 }
