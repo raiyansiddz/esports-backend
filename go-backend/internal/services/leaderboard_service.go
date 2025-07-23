@@ -75,6 +75,7 @@ func (s *leaderboardService) GetLeaderboard(contestID uuid.UUID, limit int) ([]L
 		entries = append(entries, LeaderboardEntry{
 			TeamID:   teamID,
 			TeamName: team.TeamName,
+			UserID:   team.User.ID,
 			UserName: team.User.Name,
 			Points:   result.Score,
 			Rank:     i + 1,
