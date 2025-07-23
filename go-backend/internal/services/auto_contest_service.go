@@ -311,7 +311,7 @@ func (s *AutoContestService) updateContestsForCompletedMatch(matchID uuid.UUID) 
                         contest.Status = "COMPLETED"
                         contest.UpdatedAt = time.Now()
 
-                        if err := s.contestRepo.Update(contest); err != nil {
+                        if err := s.contestRepo.Update(&contest); err != nil {
                                 log.Printf("❌ Error updating contest status: %v", err)
                         } else {
                                 log.Printf("🏁 Contest completed: %s", contest.Name)
