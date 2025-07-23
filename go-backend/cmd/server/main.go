@@ -65,6 +65,11 @@ func main() {
 	usernamePrefixRepo := repository.NewUsernamePrefixRepository(db)
 	gameRepo := repository.NewGameRepository(db)
 	gameScoringRuleRepo := repository.NewGameScoringRuleRepository(db)
+	achievementRepo := repository.NewAchievementRepository(db)
+	userAchievementRepo := repository.NewUserAchievementRepository(db)
+	contestTemplateRepo := repository.NewContestTemplateRepository(db)
+	playerAnalyticsRepo := repository.NewPlayerAnalyticsRepository(db)
+	seasonLeagueRepo := repository.NewSeasonLeagueRepository(db)
 
 	// Initialize core services
 	authService := services.NewAuthService(userRepo, cfg)
