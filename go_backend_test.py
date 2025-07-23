@@ -13,7 +13,7 @@ import threading
 from datetime import datetime
 
 # Test the GoLang backend running on localhost:8080
-BACKEND_URL = "http://localhost:8080"
+BACKEND_URL = "http://localhost:8001"
 API_BASE_URL = f"{BACKEND_URL}/api/v1"
 
 print(f"Testing GoLang eSports Fantasy Backend at: {BACKEND_URL}")
