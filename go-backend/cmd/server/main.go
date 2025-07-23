@@ -114,6 +114,8 @@ func main() {
 	// Initialize enhanced handlers
 	adminEnhancedHandler := httphandlers.NewAdminEnhancedHandler(usernameService, gameService)
 	userEnhancedHandler := httphandlers.NewUserEnhancedHandler(userService, usernameService)
+	adminAdvancedHandler := httphandlers.NewAdvancedAdminHandler(achievementService, contestTemplateService, playerAnalyticsService, seasonLeagueService)
+	userAdvancedHandler := httphandlers.NewUserAdvancedHandler(achievementService, referralService, seasonLeagueService, playerAnalyticsService)
 
 	// Initialize WebSocket hub
 	wsHub := ws.NewHub()
