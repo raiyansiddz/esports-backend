@@ -15,6 +15,7 @@ type LeaderboardService interface {
 	GetTeamRank(contestID, teamID uuid.UUID) (int, error)
 	InitializeContestLeaderboard(contestID uuid.UUID) error
 	GetContestLeaderboard(contestID uuid.UUID, limit int) ([]LeaderboardEntry, error)
+	RefreshContestLeaderboard(contestID uuid.UUID) error
 }
 
 type LeaderboardEntry struct {
