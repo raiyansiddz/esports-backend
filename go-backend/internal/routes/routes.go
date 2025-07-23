@@ -23,6 +23,8 @@ func SetupRoutes(
 	matchSimulationHandler *http.MatchSimulationHandler,
 	autoContestHandler *http.AutoContestHandler,
 	wsHandler *ws.WebSocketHandler,
+	adminEnhancedHandler *http.AdminEnhancedHandler,
+	userEnhancedHandler *http.UserEnhancedHandler,
 	cfg *config.Config,
 ) {
 	// Health check endpoint with enhanced info
