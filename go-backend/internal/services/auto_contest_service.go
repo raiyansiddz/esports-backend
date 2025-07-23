@@ -112,7 +112,7 @@ func (s *AutoContestService) autoLockContests() {
                         contest.LockedAt = &now
                         contest.UpdatedAt = time.Now()
 
-                        if err := s.contestRepo.Update(contest); err != nil {
+                        if err := s.contestRepo.Update(&contest); err != nil {
                                 log.Printf("❌ Error locking contest %s: %v", contest.ID, err)
                                 continue
                         }
