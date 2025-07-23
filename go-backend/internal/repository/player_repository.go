@@ -15,6 +15,7 @@ type PlayerRepository interface {
 	UpdatePlayer(player *models.Player) error
 	DeletePlayer(id uuid.UUID) error
 	GetPlayersByIDs(ids []uuid.UUID) ([]models.Player, error)
+	GetPlayersByMatchID(matchID string) ([]*models.Player, error)
 }
 
 type playerRepository struct {
