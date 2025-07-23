@@ -281,7 +281,7 @@ func (s *AutoContestService) autoUpdateMatchStatus() {
                         log.Printf("✅ Match completed: %s", match.Name)
 
                         // Update associated contests
-                        s.updateContestsForCompletedMatch(match.ID)
+                        s.updateContestsForCompletedMatch(match.ID.String())
                 }
 
                 if updated {
