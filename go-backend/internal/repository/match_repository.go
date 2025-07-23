@@ -77,3 +77,17 @@ func (r *matchRepository) GetMatchesNeedingLock() ([]models.Match, error) {
 		Find(&matches).Error
 	return matches, err
 }
+
+// New methods for enhanced features
+func (r *matchRepository) GetByID(id string) (*models.Match, error) {
+	var match models.Match
+	err := r.db.Preload("Tournament").First(&match, "id = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &match, nil
+}
+
+func (r *matchRepository) Update(match *models.Match) error {
+	return r.db.Save(match).Error
+}
