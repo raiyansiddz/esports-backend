@@ -92,9 +92,9 @@ func (s *FirebaseAuthService) SendOTP(phoneNumber string) (*AuthResponse, error)
 
         // Save OTP to database
         otpRecord := &models.OTP{
-                ID:          uuid.New().String(),
+                ID:          uuid.New(),
                 PhoneNumber: phoneNumber,
-                OTP:         otp,
+                Code:        otp,
                 ExpiresAt:   time.Now().Add(5 * time.Minute),
                 CreatedAt:   time.Now(),
         }
