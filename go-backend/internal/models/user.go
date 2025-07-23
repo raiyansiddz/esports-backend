@@ -59,6 +59,7 @@ type Player struct {
 	ID             uuid.UUID   `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
 	ESportsTeamID  uuid.UUID   `json:"esports_team_id"`
 	ESportsTeam    ESportsTeam `json:"esports_team" gorm:"foreignKey:ESportsTeamID"`
+	GameID         uuid.UUID   `json:"game_id"` // Players can play different games
 	Name           string      `json:"name" gorm:"not null"`
 	Role           string      `json:"role"` // rusher, assaulter, support, sniper
 	CreditValue    float64     `json:"credit_value" gorm:"default:8.0"`
