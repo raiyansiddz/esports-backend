@@ -229,7 +229,7 @@ func (s *AutoContestService) distributePrizes(contest *models.Contest) error {
                         }
 
                         // Update user wallet
-                        user, err := s.userRepo.GetByID(entry.UserID)
+                        user, err := s.userRepo.GetByID(entry.UserID.String())
                         if err != nil {
                                 log.Printf("❌ Error fetching user %s: %v", entry.UserID, err)
                                 continue
