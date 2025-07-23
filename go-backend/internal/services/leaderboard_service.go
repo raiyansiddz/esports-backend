@@ -129,3 +129,17 @@ func (s *leaderboardService) GetTeamRank(contestID, teamID uuid.UUID) (int, erro
 
 	return int(rank) + 1, nil
 }
+
+func (s *leaderboardService) InitializeContestLeaderboard(contestID uuid.UUID) error {
+	ctx := context.Background()
+	leaderboardKey := fmt.Sprintf("leaderboard:%s", contestID)
+	
+	// Initialize empty leaderboard
+	s.rdb.Del(ctx, leaderboardKey)
+	return nil
+}
+
+func (s *leaderboardService) GetContestLeaderboard(contestID uuid.UUID, limit int) ([]LeaderboardEntry, error) {
+	// This is the same as GetLeaderboard method
+	return s.GetLeaderboard(contestID, limit)
+}
