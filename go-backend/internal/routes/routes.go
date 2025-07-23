@@ -25,6 +25,8 @@ func SetupRoutes(
 	wsHandler *ws.WebSocketHandler,
 	adminEnhancedHandler *http.AdminEnhancedHandler,
 	userEnhancedHandler *http.UserEnhancedHandler,
+	adminAdvancedHandler *http.AdvancedAdminHandler,
+	userAdvancedHandler *http.UserAdvancedHandler,
 	cfg *config.Config,
 ) {
 	// Health check endpoint with enhanced info
