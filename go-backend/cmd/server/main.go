@@ -86,6 +86,11 @@ func main() {
 	// Initialize enhanced services
 	usernameService := services.NewUsernameService(userRepo, usernamePrefixRepo, cfg)
 	gameService := services.NewGameService(gameRepo, gameScoringRuleRepo, cfg)
+	achievementService := services.NewAchievementService(achievementRepo, userAchievementRepo, userRepo, cfg)
+	contestTemplateService := services.NewContestTemplateService(contestTemplateRepo, contestRepo, gameRepo, cfg)
+	playerAnalyticsService := services.NewPlayerAnalyticsService(playerAnalyticsRepo, playerRepo, gameRepo, cfg)
+	seasonLeagueService := services.NewSeasonLeagueService(seasonLeagueRepo, gameRepo, userRepo, cfg)
+	referralService := services.NewReferralService(userRepo, cfg)
 
 	// Initialize advanced services
 	phonePeService := services.NewPhonePeService(cfg, userRepo, transactionRepo, contestRepo)
