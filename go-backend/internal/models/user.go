@@ -39,7 +39,8 @@ type OTP struct {
 type Tournament struct {
 	ID        uuid.UUID `json:"id" gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
 	Name      string    `json:"name" gorm:"not null"`
-	GameType  string    `json:"game_type" gorm:"not null"` // BGMI, Valorant, etc.
+	GameID    uuid.UUID `json:"game_id"` // Reference to Game
+	GameType  string    `json:"game_type" gorm:"not null"` // BGMI, Valorant, etc. (kept for backward compatibility)
 	StartDate time.Time `json:"start_date" gorm:"not null"`
 	EndDate   time.Time `json:"end_date" gorm:"not null"`
 	Status    string    `json:"status" gorm:"default:upcoming"` // upcoming, live, completed
