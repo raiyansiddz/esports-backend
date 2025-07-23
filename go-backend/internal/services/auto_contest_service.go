@@ -19,7 +19,7 @@ type AutoContestService struct {
         fantasyTeamRepo    repository.FantasyTeamRepository
         transactionRepo    repository.TransactionRepository
         userRepo           repository.UserRepository
-        leaderboardService *LeaderboardService
+        leaderboardService LeaderboardService
         cron               *cron.Cron
 }
 
