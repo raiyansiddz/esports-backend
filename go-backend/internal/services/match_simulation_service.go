@@ -75,14 +75,6 @@ type PlayerStat struct {
         SurvivalTime int     `json:"survival_time_minutes"`
 }
 
-type LeaderboardEntry struct {
-        Rank       int     `json:"rank"`
-        TeamName   string  `json:"team_name"`
-        UserName   string  `json:"user_name"`
-        Points     float64 `json:"points"`
-        Movement   string  `json:"movement"` // UP, DOWN, SAME
-}
-
 func NewMatchSimulationService(cfg *config.Config, matchRepo repository.MatchRepository, playerRepo repository.PlayerRepository, scoringService *ScoringService, leaderboardService *LeaderboardService, rdb *redis.Client) *MatchSimulationService {
         return &MatchSimulationService{
                 cfg:                cfg,
