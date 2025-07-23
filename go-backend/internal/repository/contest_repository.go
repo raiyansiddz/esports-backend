@@ -56,3 +56,27 @@ func (r *contestRepository) IncrementEntries(contestID uuid.UUID) error {
 	return r.db.Model(&models.Contest{}).Where("id = ?", contestID).
 		Update("current_entries", gorm.Expr("current_entries + 1")).Error
 }
+
+// New methods for enhanced features
+func (r *contestRepository) Create(contest *models.Contest) error {
+	return r.db.Create(contest).Error
+}
+
+func (r *contestRepository) GetByID(id string) (*models.Contest, error) {
+	var contest models.Contest
+	err := r.db.Preload("Match").First(&contest, "id = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &contest, nil
+}
+
+func (r *contestRepository) Update(contest *models.Contest) error {
+	return r.db.Save(contest).Error
+}
+
+func (r *contestRepository) GetContestsByStatus(status string) ([]*models.Contest, error) {
+	var contests []*models.Contest
+	err := r.db.Where("status = ?", status).Preload("Match").Find(&contests).Error
+	return contests, err
+}
