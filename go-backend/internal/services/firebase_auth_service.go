@@ -174,7 +174,7 @@ func (s *FirebaseAuthService) VerifyOTP(phoneNumber, otp string) (*AuthResponse,
         if err != nil {
                 // Create new user
                 user = &models.User{
-                        ID:            uuid.New().String(),
+                        ID:            uuid.New(),
                         PhoneNumber:   phoneNumber,
                         WalletBalance: 0.0,
                         IsAdmin:       false,
