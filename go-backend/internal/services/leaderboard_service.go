@@ -20,6 +20,7 @@ type LeaderboardService interface {
 type LeaderboardEntry struct {
 	TeamID     uuid.UUID `json:"team_id"`
 	TeamName   string    `json:"team_name"`
+	UserID     uuid.UUID `json:"user_id"`
 	UserName   string    `json:"user_name"`
 	Points     float64   `json:"points"`
 	Rank       int       `json:"rank"`
