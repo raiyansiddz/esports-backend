@@ -58,3 +58,35 @@ func (s *userService) GetWalletBalance(userID uuid.UUID) (float64, error) {
 	}
 	return user.WalletBalance, nil
 }
+
+func (s *userService) UpdateUserProfile(userID uuid.UUID, name, username, profileImage string) error {
+	user, err := s.userRepo.GetUserByID(userID)
+	if err != nil {
+		return fmt.Errorf("failed to get user: %w", err)
+	}
+
+	user.Name = name
+	user.Username = username
+	user.ProfileImage = profileImage
+	
+	if err := s.userRepo.UpdateUser(user); err != nil {
+		return fmt.Errorf("failed to update user profile: %w", err)
+	}
+
+	return nil
+}
+
+func (s *userService) UpdateProfileImage(userID uuid.UUID, profileImage string) error {
+	user, err := s.userRepo.GetUserByID(userID)
+	if err != nil {
+		return fmt.Errorf("failed to get user: %w", err)
+	}
+
+	user.ProfileImage = profileImage
+	
+	if err := s.userRepo.UpdateUser(user); err != nil {
+		return fmt.Errorf("failed to update profile image: %w", err)
+	}
+
+	return nil
+}
