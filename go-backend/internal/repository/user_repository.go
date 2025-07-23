@@ -56,6 +56,15 @@ func (r *userRepository) GetUserByID(id uuid.UUID) (*models.User, error) {
 	return &user, nil
 }
 
+func (r *userRepository) GetByUsername(username string) (*models.User, error) {
+	var user models.User
+	err := r.db.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (r *userRepository) UpdateUser(user *models.User) error {
 	return r.db.Save(user).Error
 }
