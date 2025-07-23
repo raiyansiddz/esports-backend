@@ -131,9 +131,35 @@ def test_username_generation():
     try:
         headers = {"Authorization": f"Bearer {auth_token}"}
         
+        # First get available prefixes
+        prefixes_response = requests.get(
+            f"{API_BASE_URL}/user/username-prefixes",
+            headers=headers,
+            timeout=10
+        )
+        
+        print(f"Get Prefixes Status: {prefixes_response.status_code}")
+        if prefixes_response.status_code != 200:
+            print(f"❌ Failed to get prefixes: {prefixes_response.text}")
+            return False
+        
+        prefixes_data = prefixes_response.json()
+        print(f"Available prefixes: {prefixes_data}")
+        
+        # Check if we have any active prefixes
+        if "prefixes" not in prefixes_data or len(prefixes_data["prefixes"]) == 0:
+            print("❌ No active prefixes available for username generation")
+            return False
+        
+        # Use the first available prefix
+        first_prefix = prefixes_data["prefixes"][0]
+        prefix_id = first_prefix["id"]
+        
         # Test generate username endpoint
+        username_data = {"prefix_id": prefix_id}
         response = requests.post(
             f"{API_BASE_URL}/user/generate-username",
+            json=username_data,
             headers=headers,
             timeout=10
         )
