@@ -13,6 +13,12 @@ type ContestRepository interface {
 	GetContestByID(id uuid.UUID) (*models.Contest, error)
 	UpdateContest(contest *models.Contest) error
 	IncrementEntries(contestID uuid.UUID) error
+	
+	// New methods for enhanced features
+	Create(contest *models.Contest) error
+	GetByID(id string) (*models.Contest, error)
+	Update(contest *models.Contest) error
+	GetContestsByStatus(status string) ([]*models.Contest, error)
 }
 
 type contestRepository struct {
