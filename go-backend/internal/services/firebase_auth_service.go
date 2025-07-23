@@ -310,7 +310,7 @@ func (s *FirebaseAuthService) GetUserProfile(userID string) (*UserProfile, error
         }
 
         return &UserProfile{
-                ID:            user.ID,
+                ID:            user.ID.String(),
                 PhoneNumber:   user.PhoneNumber,
                 WalletBalance: user.WalletBalance,
                 IsAdmin:       user.IsAdmin,
